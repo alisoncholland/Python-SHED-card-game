@@ -7,9 +7,10 @@
 
 ## This game plays a simplified version of SHED. The goal is to get rid of the cards in your hand. 
 ## You'll play with one opponent: the computer.
-## Rules: Cards can only be played if they are higher or equal to the value of the top card on the table. 
-If they are not, you will have to pick up ALL the cards on the table. 
-The one who gets rid of all their cards first wins. 
+## Rules: 
+## - Cards can only be played if they are higher or equal to the value of the top card on the table. 
+## - If they are not, you will have to pick up ALL the cards on the table. 
+## - The one who gets rid of all their cards first wins. 
 
 # Installation
 
