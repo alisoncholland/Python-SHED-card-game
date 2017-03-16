@@ -1,0 +1,137 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved.
+
+# draw cards and take them away from deck
+def drawCards(numberOfCardsToDraw): 
+	pickedCards = [] # create empty array for picked cards
+	
+	for i in range(0, numberOfCardsToDraw): 
+		cardIndex = randint(0, len(deckCards)-1) # pick random card
+		pickedCards.append(deckCards[cardIndex]) # append picked card to picked cards array
+		del deckCards[cardIndex] # remove picked card from deck
+	
+	return pickedCards
+
+# print player's cards in console
+def showPlayerCards(): 
+	print "---"
+	sleep(1)
+	print "Your cards are:\n" 
+	
+	for i in range(0, len(playerCards)):
+		print "Card " + str(i + 1) + ": " + friendlyCardName(playerCards[i]) + "\n"
+
+# move card from player's hand to table
+def playerPlaysCard(cardIndex): 
+	tableCards.append(playerCards[cardIndex])
+	print "---"
+	sleep(1)
+	print "You played: " + friendlyCardName(playerCards[cardIndex])
+	del playerCards[cardIndex]
+	
+	if len(playerCards) == 0: # if this is the last card that's played then the player wins
+		showTableCards()
+		print "---"
+		sleep(1)
+		print "You won! Play again?"
+		exit()
+
+# move card from computer's hand to table
+def computerPlaysCard(cardIndex): 
+	tableCards.append(computerCards[cardIndex])
+	print "---"
+	sleep(1)
+	print "Your opponent played."
+	del computerCards[cardIndex]
+	
+	if len(computerCards) == 0: # if this is the last card that's played then the player loses
+		showTableCards()
+		print "---"
+		sleep(1)
+		print "You lost. Your opponent has no more cards. Play again?"
+		exit()
+
+# print top card on table in console
+def showTableCards(): 
+	if len(tableCards) > 0: # if there are already cards on the table 
+		print "---"
+		sleep(1)
+		print "The top card on the table is: \n"
+		print friendlyCardName(tableCards[len(tableCards)-1])
+		
+	else: # if there are no cards on the table
+		print "---"
+		sleep(1)
+		print "There are no cards on the table."
+
+# check if card to play is higher than card on table
+def compareTwoCards(checkCard, checkAgainstCard): 
+	if (checkCard % 100) >= (checkAgainstCard % 100): # only compare rank of card, not suit
+		return True
+		
+	else:
+		return False
+
+# sorts cards by rank, which is used for the sorted() function		
+def sortKey(num): 
+	return num % 100
+
+# runs through cards until it finds an appropriate card to play
+def executeComputersTurn(): 
+	global computerCards # make sure to use global variable, not local scope variable
+	computerCards = sorted(computerCards, key = sortKey) # sort cards in ascending order
+	
+	if len(tableCards) > 0:
+	
+		for i in range(0, len(computerCards)): # go through all cards and check if there is a card to play
+		
+			if compareTwoCards(computerCards[i], tableCards[len(tableCards)-1]):
+				computerPlaysCard(i)
+				return True
+				
+		computerPicksUpTableCards() # if a card can't be played, table cards are picked up and added to player's/computer's hand
+		return False
+		
+	else: # if there's no card on the table, play lowest card in hand
+		computerCards = sorted(computerCards, key = sortKey) # sort cards by rank
+		computerPlaysCard(0) # play first card in sorted cards, i.e. card with lowest rank
+
+# check if player has any cards to play, i.e. legal moves
+def playerHasLegalCards():
+	if len(tableCards) > 0:
+	
+		for i in range(0, len(playerCards)):
+		
+			if compareTwoCards(playerCards[i], tableCards[len(tableCards)-1]): # if the player has a card that's higher than the rank of the table card, they can play that card
+				return True
+				
+		return False
+		
+	else: # if there is no card on the table then player's choice
+		return True
+
+# player picks up all the cards on the table
+def playerPicksUpTableCards():
+	if len(tableCards) > 0:
+	
+		for i in range(0, len(tableCards)):
+			playerCards.append(tableCards[i]) # adds table cards to player's existing cards in hand
+		
+		del tableCards[:]
+		print "---"
+		sleep(1)
+		print "You don't have a card to play. Pick up the card(s) from the table."
+
+# computer picks up all the cards on the table
+def computerPicksUpTableCards():
+	if len(tableCards) > 0:
+	
+		for i in range(0, len(tableCards)):
+			computerCards.append(tableCards[i]) # adds table cards to computer's existing cards in hand
+			
+		del tableCards[:]
+		print "---"
+		sleep(1)
+		print "Your opponent doesn't have a card to play. They've picked up the card(s) from the table."	
+	
+#print compareTwoCards(112, 309) # check that modulo comparison works
+#print compareTwoCards(105, 309) 
