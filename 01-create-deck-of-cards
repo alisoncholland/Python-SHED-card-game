@@ -1,0 +1,42 @@
+deckCards = [] # array holding full deck of cards
+tableCards = [] # array of current cards on the table
+
+# generate all cards for the deck and save in variable "deckCards"
+# cards encoded as follows: 
+# 	002-010: 2 of Spades to 10 of Spades, 011: Jack of Spades, 012: Queen of Spades, 013: King of Spades, 014: Ace of Spades
+# 	102-110: 2 of Hearts to 10 of Hearts, 111: Jack of Hearts, 112: Queen of Hearts, 113: King of Hearts, 114: Ace of Hearts
+#	  202-210: 2 of Clubs to 10 of Clubs, 211: Jack of Clubs, 212: Queen of Clubs, 213: King of Clubs, 214: Ace of Clubs
+#	  302-310: 2 of Diamonds to 10 of Diamonds, 311: Jack of Diamonds, 312: Queen of Diamonds, 313: King of Diamonds, 314: Ace of Diamonds
+
+for i in range(0, 4):
+	for j in range(2, 14):
+		deckCards.append(j + i * 100)
+		
+# check if array is correct		
+#for i in range(0, len(cards_in_deck)):
+#	print cards_in_deck[i]
+
+# output human readable name for card identifier (as stated above)
+def friendlyCardName(cardNumber): 
+	rank = cardNumber % 100 # last two digits denote rank
+	suit = cardNumber / 100 # first digit denotes suit
+	
+	if suit == 0:
+		suitName = " of Spades"
+	elif suit == 1:
+		suitName = " of Hearts"
+	elif suit == 2:
+		suitName = " of Clubs"
+	else:
+		suitName = " of Diamonds"
+	
+	if rank == 14:
+		return "Ace" + suitName
+	elif rank == 13:
+		return "King" + suitName
+	elif rank == 12:
+		return "Queen" + suitName
+	elif rank == 11:
+		return "Jack" + suitName
+	else:
+		return str(rank) + suitName
